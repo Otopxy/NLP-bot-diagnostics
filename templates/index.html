@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Diagnostics Chatbot</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <div style="width: 400px; margin: 50px auto;">
+        <h2>Robot Diagnostics Chatbot</h2>
+        <div id="chat" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto;">
+            <!-- Chat messages will appear here -->
+        </div>
+        <textarea id="user-input" rows="3" style="width: 100%;"></textarea>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // Function to send message to backend
+        function sendMessage() {
+            var userInput = document.getElementById('user-input').value;
+            socket.emit('message', userInput);  // Send message to backend
+            document.getElementById('user-input').value = '';
+            addMessageToChat("You: " + userInput);
+        }
+
+        // Listen for responses from the backend
+        socket.on('response', function(data) {
+            addMessageToChat("Bot: " + data.data);
+        });
+
+        // Function to add message to chat window
+        function addMessageToChat(message) {
+            var chatBox = document.getElementById('chat');
+            chatBox.innerHTML += "<p>" + message + "</p>";
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
