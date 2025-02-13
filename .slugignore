@@ -1,5 +1,9 @@
-venv/
 *.log
+*.tmp
+*.md
+tests/
+docs/
 __pycache__/
 *.pyc
-*.tmp
+*.sqlite3
+node_modules/
